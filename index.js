@@ -1,4 +1,4 @@
-const CARQUERY_API_ENDPOINT = "https://www.carqueryapi.com/api/0.3/?callback=?";
+const CAcRQUERY_API_ENDPOINT = "https://www.carqueryapi.com/api/0.3/?callback=?";
 
 document.addEventListener("DOMContentLoaded", function() {
   populateMakeDropdown();
@@ -60,10 +60,8 @@ document.getElementById("make").addEventListener("change", function() {
   populateModelDropdown(makeId);
 });
 
-// Event listener for "Model" dropdown change
-document.getElementById("model").addEventListener("change", function() {
-  fetchCarInfo();
-});
+// Event listener for "Get Car Info" button click
+document.getElementById("getCarInfoBtn").addEventListener("click", fetchCarInfo);
 
 function fetchCarInfo() {
   var make = document.getElementById("make").value;
