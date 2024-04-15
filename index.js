@@ -1,17 +1,15 @@
-const CAcRQUERY_API_ENDPOINT = "https://www.carqueryapi.com/api/0.3/?callback=?&cmd=getModels&make=ford&year=2005&sold_in_us=1&body=SUV";
-
 document.addEventListener("DOMContentLoaded", function() {
-  populateMakeDropdown();
+  populateMakesDropdown();
 });
 
-function populateMakeDropdown() {
+function populateMakesDropdown() {
   var makeDropdown = document.getElementById("make");
-  makeDropdown.innerHTML = "<option>Loading...</option>";
 
-  fetch(CARQUERY_API_ENDPOINT + "&cmd=getMakes")
+  fetch("https://www.carqueryapi.com/api/0.3/?callback=?&cmd=getMakes&year=2000&sold_in_us=1", {
+    method: "GET"
+  })
     .then(response => response.json())
     .then(data => {
-      makeDropdown.innerHTML = "<option value=''>Select Make</option>";
       data.Makes.forEach(make => {
         var option = document.createElement("option");
         option.text = make.make_display;
@@ -21,87 +19,98 @@ function populateMakeDropdown() {
     })
     .catch(error => {
       console.error("Error fetching makes:", error);
-      makeDropdown.innerHTML = "<option>Error fetching makes</option>";
     });
-}
 
-function populateModelDropdown(makeId) {
-  var modelDropdown = document.getElementById("model");
-  modelDropdown.innerHTML = "<option>Loading...</option>";
+  makeDropdown.addEventListener("change", function() {
+    var selectedMakeId = this.value;
+    var modelDropdown = document.getElementById("model");
 
-  if (!makeId) {
-    modelDropdown.innerHTML = "<option>Select Make First</option>";
-    modelDropdown.disabled = true;
-    return;
-  }
+    modelDropdown.innerHTML = "<option value=''>Select Model</option>";
 
-  fetch(CARQUERY_API_ENDPOINT + "&cmd=getModels&make=" + makeId)
-    .then(response => response.json())
-    .then(data => {
-      modelDropdown.innerHTML = "<option value=''>Select Model</option>";
-      data.Models.forEach(model => {
-        var option = document.createElement("option");
-        option.text = model.model_name;
-        option.value = model.model_name;
-        modelDropdown.appendChild(option);
-      });
-      modelDropdown.disabled = false;
-    })
-    .catch(error => {
-      console.error("Error fetching models:", error);
-      modelDropdown.innerHTML = "<option>Error fetching models</option>";
+    if (selectedMakeId === "") {
       modelDropdown.disabled = true;
-    });
+      return;
+    }
+
+    fetch(`https://www.carqueryapi.com/api/0.3/?callback=?&cmd=getModels&make=${selectedMakeId}&year=2005&sold_in_us=1&body=SUV`, {
+      method: "GET"
+    })
+      .then(response => response.json())
+      .then(data => {
+        data.Models.forEach(model => {
+          var option = document.createElement("option");
+          option.text = model.model_name;
+          option.value = model.model_name;
+          modelDropdown.appendChild(option);
+        });
+        modelDropdown.disabled = false;
+      })
+      .catch(error => {
+        console.error("Error fetching models:", error);
+        modelDropdown.disabled = true;
+      });
+  });
 }
 
-// Event listener for "Make" dropdown change
-document.getElementById("make").addEventListener("change", function() {
-  var makeId = this.value;
-  populateModelDropdown(makeId);
-});
-
-// Event listener for "Get Car Info" button click
-document.getElementById("getCarInfoBtn").addEventListener("click", fetchCarInfo);
-
-function fetchCarInfo() {
+document.getElementById("getCarInfoBtn").addEventListener("click", function() {
   var make = document.getElementById("make").value;
   var model = document.getElementById("model").value;
   var year = document.getElementById("year").value;
 
-  if (!make || !model || !year) {
-    document.getElementById("carInfo").innerHTML = "<p class='error-message'>Please select Make, Model, and Year</p>";
+  if (!make) {
+    alert("Please select Make");
     return;
   }
 
-  var params = {
+  if (!model) {
+    alert("Please select Model");
+    return;
+  }
+
+  if (!year) {
+    alert("Please select Year");
+    return;
+  }
+
+  fetchCarInfo(make, model, year);
+});
+
+function fetchCarInfo(make, model, year) {
+  var apiUrl = "https://www.carqueryapi.com/api/0.3/?callback=?";
+  var requestData = {
     cmd: "getTrims",
     make: make,
     model: model,
-    year: year
+    year: year,
   };
 
-  var queryParams = Object.keys(params)
-    .map(key => encodeURIComponent(key) + "=" + encodeURIComponent(params[key]))
-    .join("&");
-
-  var requestUrl = CARQUERY_API_ENDPOINT + "&" + queryParams;
-
-  document.getElementById("carInfo").innerHTML = "Loading...";
-
-  fetch(requestUrl)
+  fetch(apiUrl, {
+    method: "POST",
+    body: JSON.stringify(requestData),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
     .then(response => response.json())
     .then(data => {
       if (data.Trims && data.Trims.length > 0) {
-        var carDetails = "<h2>" + data.Trims[0].model_name + "</h2>";
-        carDetails += "<p><strong>Make:</strong> " + data.Trims[0].make_display + "</p>";
-        carDetails += "<p><strong>Model:</strong> " + data.Trims[0].model_name + "</p>";
-        carDetails += "<p><strong>Year:</strong> " + data.Trims[0].model_year + "</p>";
-        carDetails += "<p><strong>Engine:</strong> " + data.Trims[0].engine_power + " " + data.Trims[0].engine_power_unit + "</p>";
-        carDetails += "<p><strong>Price:</strong> $" + data.Trims[0].model_price + "</p>";
-        carDetails += "<p><strong>Fuel Type:</strong> " + data.Trims[0].model_fuel_type + "</p>";
-        carDetails += "<p><strong>Transmission:</strong> " + data.Trims[0].model_transmission_type + "</p>";
+        var carInfo = "<h2>Car Information</h2>";
+        carInfo += "<p><strong>Make:</strong> " + data.Trims[0].make_display + "</p>";
+        carInfo += "<p><strong>Model:</strong> " + data.Trims[0].model_name + "</p>";
+        carInfo += "<p><strong>Year:</strong> " + data.Trims[0].model_year + "</p>";
+        carInfo += "<p><strong>Price:</strong> $" + data.Trims[0].model_price + "</p>";
+        carInfo += "<p><strong>Fuel Type:</strong> " + data.Trims[0].model_fuel_type + "</p>";
+        carInfo += "<p><strong>Transmission:</strong> " + data.Trims[0].model_transmission_type + "</p>";
+        carInfo += "<p><strong>Engine:</strong> " + data.Trims[0].model_engine_type + "</p>";
+        carInfo += "<p><strong>Engine Size:</strong> " + data.Trims[0].model_engine_size + " L</p>";
+        carInfo += "<p><strong>Doors:</strong> " + data.Trims[0].model_doors + "</p>";
+        carInfo += "<p><strong>Seats:</strong> " + data.Trims[0].model_seats + "</p>";
+        carInfo += "<p><strong>Drive:</strong> " + data.Trims[0].model_drive + "</p>";
+        carInfo += "<p><strong>Weight:</strong> " + data.Trims[0].model_weight + " lbs</p>";
+        carInfo += "<p><strong>Acceleration 0-60 mph:</strong> " + data.Trims[0].model_0_to_60 + " seconds</p>";
+        carInfo += "<p><strong>Top Speed:</strong> " + data.Trims[0].model_top_speed + " mph</p>";
 
-        document.getElementById("carInfo").innerHTML = carDetails;
+        document.getElementById("carInfo").innerHTML = carInfo;
       } else {
         document.getElementById("carInfo").innerHTML = "No information found for the selected car.";
       }
@@ -111,3 +120,4 @@ function fetchCarInfo() {
       document.getElementById("carInfo").innerHTML = "An error occurred. Please try again later.";
     });
 }
+
