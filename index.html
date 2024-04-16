@@ -13,29 +13,29 @@
     <div class="input-container">
       <label for="makeSelect">Select Make:</label>
       <select id="makeSelect"></select>
-      <div id="selectedMake" class="selected-info"></div>
+    </div>
+    
+    <div class="input-container">
+      <label for="modelSelect">Select Model:</label>
+      <select id="modelSelect"></select>
     </div>
     
     <div class="input-container">
       <label for="yearSelect">Select Year:</label>
       <select id="yearSelect"></select>
-      <div id="selectedYear" class="selected-info"></div>
     </div>
     
     <div class="input-container">
       <label for="vehicleTypeSelect">Select Vehicle Type (Optional):</label>
       <select id="vehicleTypeSelect">
         <option value="">Any</option>
-        <option value="car">Car</option>
-        <option value="truck">Truck</option>
-        <option value="motorcycle">Motorcycle</option>
-        <!-- Add more options as needed -->
+        <!-- Options will be dynamically added using JavaScript -->
       </select>
     </div>
     
-    <button onclick="getCarModels()">Get Car Models</button>
+    <button onclick="getCarInfo()">Get Car Information</button>
     
-    <div id="carModels" class="car-info"></div>
+    <div id="carInfo" class="car-info"></div>
   </div>
 
   <script src="script.js"></script>
