@@ -1,31 +1,36 @@
-body {
-  font-family: Arial, sans-serif;
-  background-color: #f0f0f0;
-  margin: 0;
-  padding: 20px;
-}
-
 .container {
   max-width: 600px;
   margin: 0 auto;
-  background-color: #fff;
   padding: 20px;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
   border-radius: 8px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-h1 {
-  text-align: center;
+.input-container {
+  margin-bottom: 20px;
 }
 
-select, button {
+label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+select {
   width: 100%;
   padding: 10px;
-  margin: 10px 0;
   font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
 }
 
 button {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
   background-color: #007bff;
   color: #fff;
   border: none;
@@ -37,11 +42,20 @@ button:hover {
   background-color: #0056b3;
 }
 
-#carInfo {
+.car-info {
   margin-top: 20px;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: #fff;
 }
 
-#carInfo p {
-  margin: 5px 0;
+.selected-info {
+  margin-top: 5px;
+  padding: 5px;
+  border: 1px solid #007bff;
+  border-radius: 4px;
+  background-color: #f0faff;
+  font-weight: bold;
 }
  
