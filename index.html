@@ -12,17 +12,26 @@
     
     <div class="input-container">
       <label for="makeSelect">Select Make:</label>
-      <select id="makeSelect"></select>
+      <select id="makeSelect" onchange="fetchCarModels(this.value)">
+        <option value="">Select Make</option>
+        <!-- Options will be dynamically added using JavaScript -->
+      </select>
     </div>
     
     <div class="input-container">
       <label for="modelSelect">Select Model:</label>
-      <select id="modelSelect"></select>
+      <select id="modelSelect">
+        <option value="">Select Model</option>
+        <!-- Options will be dynamically added using JavaScript -->
+      </select>
     </div>
     
     <div class="input-container">
       <label for="yearSelect">Select Year:</label>
-      <select id="yearSelect"></select>
+      <select id="yearSelect">
+        <option value="">Select Year</option>
+        <!-- Options will be dynamically added using JavaScript -->
+      </select>
     </div>
     
     <div class="input-container">
@@ -34,6 +43,11 @@
     </div>
     
     <button onclick="getCarInfo()">Get Car Information</button>
+    
+    <div id="selectedMake" class="selected-info"></div>
+    <div id="selectedModel" class="selected-info"></div>
+    <div id="selectedYear" class="selected-info"></div>
+    <div id="selectedVehicleType" class="selected-info"></div>
     
     <div id="carInfo" class="car-info"></div>
   </div>
