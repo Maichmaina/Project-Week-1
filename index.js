@@ -59,6 +59,11 @@ function getCarInfo() {
     .catch(error => {
       console.error('Error fetching car information:', error);
     });
+
+  // Display selected make, model, and year
+  document.getElementById('selectedMake').textContent = `Selected Make: ${make}`;
+  document.getElementById('selectedModel').textContent = `Selected Model: ${model}`;
+  document.getElementById('selectedYear').textContent = `Selected Year: ${year}`;
 }
 
 // Function to display car information
