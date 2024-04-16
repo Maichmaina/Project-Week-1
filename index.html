@@ -17,20 +17,25 @@
     </div>
     
     <div class="input-container">
-      <label for="modelSelect">Select Model:</label>
-      <select id="modelSelect"></select>
-      <div id="selectedModel" class="selected-info"></div>
-    </div>
-    
-    <div class="input-container">
       <label for="yearSelect">Select Year:</label>
       <select id="yearSelect"></select>
       <div id="selectedYear" class="selected-info"></div>
     </div>
     
-    <button onclick="getCarInfo()">Get Car Information</button>
+    <div class="input-container">
+      <label for="vehicleTypeSelect">Select Vehicle Type (Optional):</label>
+      <select id="vehicleTypeSelect">
+        <option value="">Any</option>
+        <option value="car">Car</option>
+        <option value="truck">Truck</option>
+        <option value="motorcycle">Motorcycle</option>
+        <!-- Add more options as needed -->
+      </select>
+    </div>
     
-    <div id="carInfo" class="car-info"></div>
+    <button onclick="getCarModels()">Get Car Models</button>
+    
+    <div id="carModels" class="car-info"></div>
   </div>
 
   <script src="script.js"></script>
