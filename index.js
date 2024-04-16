@@ -1,6 +1,50 @@
 document.addEventListener("DOMContentLoaded", function() {
+  createForm();
   populateMakesDropdown();
 });
+
+function createForm() {
+  var container = document.createElement("div");
+  container.classList.add("container");
+
+  var heading = document.createElement("h1");
+  heading.textContent = "Car Information Lookup";
+
+  var makeDropdown = document.createElement("select");
+  makeDropdown.id = "make";
+  makeDropdown.innerHTML = "<option value=''>Select Make</option>";
+
+  var modelDropdown = document.createElement("select");
+  modelDropdown.id = "model";
+  modelDropdown.disabled = true;
+  modelDropdown.innerHTML = "<option value=''>Select Model</option>";
+
+  var yearDropdown = document.createElement("select");
+  yearDropdown.id = "year";
+  yearDropdown.innerHTML = `
+    <option value="">Select Year</option>
+    <option value="2000">2000</option>
+    <option value="2001">2001</option>
+    <option value="2002">2002</option>
+    <!-- Add more years as needed -->
+  `;
+
+  var getCarInfoBtn = document.createElement("button");
+  getCarInfoBtn.id = "getCarInfoBtn";
+  getCarInfoBtn.textContent = "Get Car Info";
+
+  var carInfoDiv = document.createElement("div");
+  carInfoDiv.id = "carInfo";
+
+  container.appendChild(heading);
+  container.appendChild(makeDropdown);
+  container.appendChild(modelDropdown);
+  container.appendChild(yearDropdown);
+  container.appendChild(getCarInfoBtn);
+  container.appendChild(carInfoDiv);
+
+  document.body.appendChild(container);
+}
 
 function populateMakesDropdown() {
   var makeDropdown = document.getElementById("make");
@@ -52,27 +96,29 @@ function populateMakesDropdown() {
   });
 }
 
-document.getElementById("getCarInfoBtn").addEventListener("click", function() {
-  var make = document.getElementById("make").value;
-  var model = document.getElementById("model").value;
-  var year = document.getElementById("year").value;
+document.addEventListener("click", function(event) {
+  if (event.target && event.target.id === "getCarInfoBtn") {
+    var make = document.getElementById("make").value;
+    var model = document.getElementById("model").value;
+    var year = document.getElementById("year").value;
 
-  if (!make) {
-    alert("Please select Make");
-    return;
+    if (!make) {
+      alert("Please select Make");
+      return;
+    }
+
+    if (!model) {
+      alert("Please select Model");
+      return;
+    }
+
+    if (!year) {
+      alert("Please select Year");
+      return;
+    }
+
+    fetchCarInfo(make, model, year);
   }
-
-  if (!model) {
-    alert("Please select Model");
-    return;
-  }
-
-  if (!year) {
-    alert("Please select Year");
-    return;
-  }
-
-  fetchCarInfo(make, model, year);
 });
 
 function fetchCarInfo(make, model, year) {
@@ -120,4 +166,3 @@ function fetchCarInfo(make, model, year) {
       document.getElementById("carInfo").innerHTML = "An error occurred. Please try again later.";
     });
 }
-
