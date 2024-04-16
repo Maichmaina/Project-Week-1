@@ -1,9 +1,8 @@
-// Function to fetch available car makes from the API and populate dropdown
+// Function to fetch available car makes from the provided link and populate dropdown
 function fetchCarMakes() {
-  const baseUrl = 'https://vpic.nhtsa.dot.gov/api/vehicles';
-  const endpoint = '/GetMakesForVehicleType/car?format=json';
+  const url = 'https://vpic.nhtsa.dot.gov/api/vehicles/GetMakesForVehicleType/car?format=json';
 
-  fetch(baseUrl + endpoint)
+  fetch(url)
     .then(response => response.json())
     .then(data => {
       const makeSelect = document.getElementById('makeSelect');
