@@ -4,28 +4,22 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Car Information Lookup</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://www.carqueryapi.com/js/carquery.0.3.4.js"></script>
+  <script src="script.js" defer></script>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <div class="container">
     <h1>Car Information Lookup</h1>
-    <select id="make">
-      <option value="">Select Make</option>
-    </select>
-    <select id="model" disabled>
-      <option value="">Select Model</option>
-    </select>
-    <select id="year">
-      <option value="">Select Year</option>
-      <option value="2000">2000</option>
-      <option value="2001">2001</option>
-      <option value="2002">2002</option>
-      <!-- Add more years as needed -->
-    </select>
-    <button id="getCarInfoBtn">Get Car Info</button>
+    <div id="carQueryForm">
+      <select id="car-years"></select>  
+      <select id="car-makes"></select> 
+      <select id="car-models"></select>
+      <select id="car-model-trims"></select>
+      <button id="getCarInfoBtn">Get Car Info</button>
+    </div>
     <div id="carInfo"></div>
   </div>
-  
-  <script src="script.js"></script>
 </body>
 </html>
