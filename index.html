@@ -4,41 +4,32 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Car Information Lookup</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://www.carqueryapi.com/js/carquery.0.3.4.js"></script>
+  <script src="script.js" defer></script>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <div class="container">
     <h1>Car Information Lookup</h1>
-    <div class="form-group">
-      <label for="make">Make:</label>
+    <div id="carQueryForm">
       <select id="make">
-        <option>Loading...</option>
-      </select>
-    </div>
-
-    <div class="form-group">
-      <label for="model">Model:</label>
+        <option value="">Select Make</option>
+      </select>  
       <select id="model" disabled>
-        <option>Select Make First</option>
+        <option value="">Select Model</option>
       </select>
-    </div>
-
-    <div class="form-group">
-      <label for="year">Year:</label>
       <select id="year">
-        <!-- You can populate years dynamically or provide a static list -->
-        <option>2022</option>
-        <option>2021</option>
-        <option>2020</option>
-        <!-- Add more options as needed -->
+        <option value="">Select Year</option>
+        <!-- Add more years as needed -->
+        <option value="2000">2000</option>
+        <option value="2001">2001</option>
+        <option value="2002">2002</option>
       </select>
+      <button id="getCarInfoBtn">Get Car Info</button>
     </div>
-
-    <button id="getCarInfoBtn">Get Car Info</button>
-
     <div id="carInfo"></div>
   </div>
-
-  <script src="script.js"></script>
 </body>
 </html>
+
