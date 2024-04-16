@@ -19,63 +19,103 @@ function fetchCarMakes() {
     });
 }
 
-// Function to fetch car models for the selected make, year, and vehicle type from the API
-function fetchCarModels(make, year, vehicleType) {
+// Function to fetch car models for the selected make from the API
+function fetchCarModels(make) {
   const baseUrl = 'https://vpic.nhtsa.dot.gov/api/vehicles';
-  let endpoint = `/GetModelsForMakeYear/make/${make}/modelyear/${year}?format=json`;
-
-  if (vehicleType) {
-    endpoint = `/GetModelsForMakeYear/make/${make}/modelyear/${year}/vehicletype/${vehicleType}?format=json`;
-  }
+  const endpoint = `/GetModelsForMake/${make}?format=json`;
 
   fetch(baseUrl + endpoint)
     .then(response => response.json())
     .then(data => {
-      displayCarModels(data.Results);
+      const modelSelect = document.getElementById('modelSelect');
+      modelSelect.innerHTML = ''; // Clear previous options
+
+      data.Results.forEach(model => {
+        const option = document.createElement('option');
+        option.value = model.Model_Name;
+        option.textContent = model.Model_Name;
+        modelSelect.appendChild(option);
+      });
     })
     .catch(error => {
       console.error('Error fetching car models:', error);
     });
 }
 
-// Function to get selected make, year, and vehicle type, and fetch car models
-function getCarModels() {
+// Function to fetch car information for the selected make, model, year, and vehicle type from the API
+function getCarInfo() {
   const make = document.getElementById('makeSelect').value;
+  const model = document.getElementById('modelSelect').value;
   const year = document.getElementById('yearSelect').value;
   const vehicleType = document.getElementById('vehicleTypeSelect').value;
   
-  fetchCarModels(make, year, vehicleType);
+  const baseUrl = 'https://vpic.nhtsa.dot.gov/api/vehicles';
+  let endpoint = `/GetVehicleVariableList/modelyear/${year}/make/${make}/model/${model}?format=json`;
 
-  // Display selected make, year, and vehicle type
-  document.getElementById('selectedMake').textContent = `Selected Make: ${make}`;
-  document.getElementById('selectedYear').textContent = `Selected Year: ${year}`;
-  document.getElementById('selectedVehicleType').textContent = `Selected Vehicle Type: ${vehicleType || 'Any'}`;
-}
-
-// Function to display fetched car models
-function displayCarModels(models) {
-  const carModelsContainer = document.getElementById('carModels');
-  carModelsContainer.innerHTML = ''; // Clear previous content
-
-  if (models.length === 0) {
-    carModelsContainer.textContent = 'No models found.';
-    return;
+  if (vehicleType) {
+    endpoint = `/GetVehicleVariableList/modelyear/${year}/make/${make}/model/${model}/vehicletype/${vehicleType}?format=json`;
   }
 
-  const ul = document.createElement('ul');
-  models.forEach(model => {
-    const li = document.createElement('li');
-    li.textContent = model.Model_Name;
-    ul.appendChild(li);
-  });
-
-  carModelsContainer.appendChild(ul);
+  fetch(baseUrl + endpoint)
+    .then(response => response.json())
+    .then(data => {
+      displayCarInfo(data.Results);
+    })
+    .catch(error => {
+      console.error('Error fetching car information:', error);
+    });
 }
 
-// Event listeners to fetch car models when make, year, or vehicle type are selected
-document.getElementById('makeSelect').addEventListener('change', getCarModels);
-document.getElementById('yearSelect').addEventListener('change', getCarModels);
-document.getElementById('vehicleTypeSelect').addEventListener('change', getCarModels);
+// Function to display car information
+function displayCarInfo(carInfo) {
+  const carDetails = `
+    <h2>Car Information</h2>
+    <ul>
+      ${carInfo.map(item => `<li><strong>${item.Variable}:</strong> ${item.Value}</li>`).join('')}
+    </ul>
+    <button onclick="displayMoreInfo()">More Info</button>
+    <div id="moreInfo" style="display: none;"></div>
+  `;
+
+  document.getElementById('carInfo').innerHTML = carDetails;
+}
+
+// Function to display more detailed information
+function displayMoreInfo() {
+  const make = document.getElementById('makeSelect').value;
+  const model = document.getElementById('modelSelect').value;
+  const year = document.getElementById('yearSelect').value;
+  const vehicleType = document.getElementById('vehicleTypeSelect').value;
+  
+  const baseUrl = 'https://vpic.nhtsa.dot.gov/api/vehicles';
+  let endpoint = `/GetVehicleVariableList/modelyear/${year}/make/${make}/model/${model}?format=json`;
+
+  if (vehicleType) {
+    endpoint = `/GetVehicleVariableList/modelyear/${year}/make/${make}/model/${model}/vehicletype/${vehicleType}?format=json`;
+  }
+
+  fetch(baseUrl + endpoint)
+    .then(response => response.json())
+    .then(data => {
+      const moreInfoContainer = document.getElementById('moreInfo');
+      moreInfoContainer.innerHTML = `
+        <h3>More Information</h3>
+        <ul>
+          ${data.Results.map(item => `<li><strong>${item.Variable}:</strong> ${item.Value}</li>`).join('')}
+        </ul>
+      `;
+      moreInfoContainer.style.display = 'block';
+    })
+    .catch(error => {
+      console.error('Error fetching more information:', error);
+    });
+}
+
+// Event listener to fetch car models when make is selected
+document.getElementById('makeSelect').addEventListener('change', () => {
+  const selectedMake = document.getElementById('makeSelect').value;
+  fetchCarModels(selectedMake);
+});
 
 // On page load, fetch car makes and populate the year dropdown with current and past 10 years
 window.onload = () => {
