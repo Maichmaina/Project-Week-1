@@ -1,4 +1,4 @@
-// Function to fetch available car makes from the API
+// Function to fetch available car makes from the API and populate dropdown
 function fetchCarMakes() {
   const baseUrl = 'https://vpic.nhtsa.dot.gov/api/vehicles';
   const endpoint = '/GetMakesForVehicleType/car?format=json';
@@ -7,11 +7,12 @@ function fetchCarMakes() {
     .then(response => response.json())
     .then(data => {
       const makeSelect = document.getElementById('makeSelect');
+      makeSelect.innerHTML = ''; // Clear previous options
+      makeSelect.add(new Option('Select Make', '')); // Add default option
+
       data.Results.forEach(make => {
-        const option = document.createElement('option');
-        option.value = make.MakeName;
-        option.textContent = make.MakeName;
-        makeSelect.appendChild(option);
+        const option = new Option(make.MakeName, make.MakeName);
+        makeSelect.add(option);
       });
     })
     .catch(error => {
@@ -19,7 +20,7 @@ function fetchCarMakes() {
     });
 }
 
-// Function to fetch car models for the selected make from the API
+// Function to fetch car models for the selected make from the API and populate dropdown
 function fetchCarModels(make) {
   const baseUrl = 'https://vpic.nhtsa.dot.gov/api/vehicles';
   const endpoint = `/GetModelsForMake/${make}?format=json`;
@@ -29,18 +30,23 @@ function fetchCarModels(make) {
     .then(data => {
       const modelSelect = document.getElementById('modelSelect');
       modelSelect.innerHTML = ''; // Clear previous options
+      modelSelect.add(new Option('Select Model', '')); // Add default option
 
       data.Results.forEach(model => {
-        const option = document.createElement('option');
-        option.value = model.Model_Name;
-        option.textContent = model.Model_Name;
-        modelSelect.appendChild(option);
+        const option = new Option(model.Model_Name, model.Model_Name);
+        modelSelect.add(option);
       });
     })
     .catch(error => {
       console.error('Error fetching car models:', error);
     });
 }
+
+// Event listener to fetch car models when make is selected
+document.getElementById('makeSelect').addEventListener('change', () => {
+  const selectedMake = document.getElementById('makeSelect').value;
+  fetchCarModels(selectedMake);
+});
 
 // Function to fetch car information for the selected make, model, year, and vehicle type from the API
 function getCarInfo() {
@@ -111,12 +117,6 @@ function displayMoreInfo() {
     });
 }
 
-// Event listener to fetch car models when make is selected
-document.getElementById('makeSelect').addEventListener('change', () => {
-  const selectedMake = document.getElementById('makeSelect').value;
-  fetchCarModels(selectedMake);
-});
-
 // On page load, fetch car makes and populate the year dropdown with current and past 10 years
 window.onload = () => {
   fetchCarMakes();
@@ -124,9 +124,7 @@ window.onload = () => {
   const yearSelect = document.getElementById('yearSelect');
   const currentYear = new Date().getFullYear();
   for (let year = currentYear; year >= currentYear - 10; year--) {
-    const option = document.createElement('option');
-    option.value = year;
-    option.textContent = year;
-    yearSelect.appendChild(option);
+    const option = new Option(year, year);
+    yearSelect.add(option);
   }
 };
