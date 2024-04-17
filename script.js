@@ -1,92 +1,92 @@
-document.addEventListener('DOMContentLoaded', function() {
-  populateDropdowns();
+// Define arrays of predefined makes, models, and years
+const predefinedMakes = ["Honda", "Toyota", "Ford"];
+const predefinedModels = {
+  "Honda": ["Accord", "Civic", "CR-V"],
+  "Toyota": ["Camry", "Corolla", "Rav4"],
+  "Ford": ["F-150", "Focus", "Escape"]
+};
+const predefinedYears = (() => {
+  const currentYear = new Date().getFullYear();
+  const years = [];
+  for (let year = currentYear; year >= currentYear - 10; year--) {
+    years.push(year.toString());
+  }
+  return years;
+})();
 
-  // Add event listener for "Get Car Info" button click
-  document.getElementById('getCarInfoBtn').addEventListener('click', () => {
-    getCarInfoFromFile();
+// Function to populate the dropdown with predefined makes
+function populateMakesDropdown() {
+  const makeSelect = document.getElementById('makeSelect');
+  makeSelect.innerHTML = ''; // Clear previous options
+  makeSelect.add(new Option('Select Make', '')); // Add default option
+
+  predefinedMakes.forEach(make => {
+    const option = new Option(make, make);
+    makeSelect.add(option);
   });
-});
-
-function populateDropdowns() {
-  fetch('data.js')
-    .then(response => {
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-      return response.json();
-    })
-    .then(data => {
-      const makes = Object.keys(data);
-      const makeSelect = document.getElementById('makeSelect');
-      makeSelect.innerHTML = '';
-      makeSelect.add(new Option('Select Make', ''));
-
-      makes.forEach(make => {
-        const option = new Option(make, make);
-        makeSelect.add(option);
-      });
-
-      // Call populateModelsDropdown initially to populate models based on the default make
-      const defaultMake = makeSelect.value;
-      populateModelsDropdown(defaultMake, data);
-
-      // Populate years dropdown
-      const yearSelect = document.getElementById('yearSelect');
-      yearSelect.innerHTML = '';
-      const currentYear = new Date().getFullYear();
-      for (let year = currentYear; year >= currentYear - 10; year--) {
-        const option = new Option(year, year);
-        yearSelect.add(option);
-      }
-    })
-    .catch(error => {
-      console.error('Error fetching vehicle data:', error);
-    });
 }
 
-function populateModelsDropdown(make, data) {
+// Function to populate the dropdown with predefined models based on the selected make
+function populateModelsDropdown(make) {
   const modelSelect = document.getElementById('modelSelect');
-  modelSelect.innerHTML = '';
-  modelSelect.add(new Option('Select Model', ''));
+  modelSelect.innerHTML = ''; // Clear previous options
+  modelSelect.add(new Option('Select Model', '')); // Add default option
 
-  const models = data[make] || [];
+  const models = predefinedModels[make] || [];
   models.forEach(model => {
     const option = new Option(model, model);
     modelSelect.add(option);
   });
 }
 
-function getCarInfoFromFile() {
-  fetch('data.js')
-    .then(response => {
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-      return response.json();
-    })
-    .then(data => {
-      displayCarInfo(data);
-    })
-    .catch(error => {
-      console.error('Error fetching car information:', error);
-    });
+// Function to populate the dropdown with predefined years
+function populateYearsDropdown() {
+  const yearSelect = document.getElementById('yearSelect');
+  yearSelect.innerHTML = ''; // Clear previous options
+
+  predefinedYears.forEach(year => {
+    const option = new Option(year, year);
+    yearSelect.add(option);
+  });
 }
 
-function displayCarInfo(data) {
+// On page load, populate dropdowns with predefined values and add event listeners
+window.onload = () => {
+  populateMakesDropdown();
+  populateYearsDropdown();
+
+  // Add event listener for make selection change
+  document.getElementById('makeSelect').addEventListener('change', () => {
+    const make = document.getElementById('makeSelect').value;
+    populateModelsDropdown(make);
+  });
+
+  // Call populateModelsDropdown initially to populate models based on the default make
+  const defaultMake = document.getElementById('makeSelect').value;
+  populateModelsDropdown(defaultMake);
+};
+
+// Function to get car information and display it
+function getCarInfo() {
   const make = document.getElementById('makeSelect').value;
   const model = document.getElementById('modelSelect').value;
   const year = document.getElementById('yearSelect').value;
-  const engineCC = data[make][model].engineCC;
-  const transmission = data[make][model].transmission;
 
+  // Hardcoded car details
   const carDetails = [
     { Variable: "Make", Value: make },
     { Variable: "Model", Value: model },
     { Variable: "Year", Value: year },
-    { Variable: "Engine CC", Value: engineCC },
-    { Variable: "Transmission", Value: transmission }
+    { Variable: "Engine CC", Value: "1500" }, // Example engine cc
+    { Variable: "Transmission", Value: "Automatic" }, // Example transmission
+    // Add more details as needed
   ];
 
-  const carDetailsHTML = carDetails.map(item => `<p><strong>${item.Variable}:</strong> ${item.Value}</p>`).join('');
+  displayCarInfo(carDetails);
+}
+
+// Function to display car information
+function displayCarInfo(carInfo) {
+  const carDetailsHTML = carInfo.map(item => `<p><strong>${item.Variable}:</strong> ${item.Value}</p>`).join('');
   document.getElementById('carInfo').innerHTML = carDetailsHTML;
 }
