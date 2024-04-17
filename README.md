@@ -19,3 +19,9 @@ You need to fork and clone the repository to your computer using the git clone c
 
 ## Description
 The program is a program designed to allow the user to input the make, model and year of manufacture of a specific vehicle. Once the user selects, the program can be ran to display other detailed information about the car.
+
+## Usage
+Select the make, model and year of choice an clicj=k on the view info button to display some more details such as the engine cc and the transmission of the seleted. 
+
+# License
+This project is licensed under the MIT License.
