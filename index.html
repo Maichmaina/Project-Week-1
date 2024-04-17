@@ -4,53 +4,36 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Car Information</title>
-  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="container">
-    <h1>Car Information Lookup</h1>
-    
-    <div class="input-container">
-      <label for="makeSelect">Select Make:</label>
-      <select id="makeSelect" onchange="fetchCarModels(this.value)">
-        <option value="">Select Make</option>
-        <!-- Options will be dynamically added using JavaScript -->
-      </select>
-    </div>
-    
-    <div class="input-container">
-      <label for="modelSelect">Select Model:</label>
-      <select id="modelSelect">
-        <option value="">Select Model</option>
-        <!-- Options will be dynamically added using JavaScript -->
-      </select>
-    </div>
-    
-    <div class="input-container">
-      <label for="yearSelect">Select Year:</label>
-      <select id="yearSelect">
-        <option value="">Select Year</option>
-        <!-- Options will be dynamically added using JavaScript -->
-      </select>
-    </div>
-    
-    <div class="input-container">
-      <label for="vehicleTypeSelect">Select Vehicle Type (Optional):</label>
-      <select id="vehicleTypeSelect">
-        <option value="">Any</option>
-        <!-- Options will be dynamically added using JavaScript -->
-      </select>
-    </div>
-    
-    <button onclick="getCarInfo()">Get Car Information</button>
-    
-    <div id="selectedMake" class="selected-info"></div>
-    <div id="selectedModel" class="selected-info"></div>
-    <div id="selectedYear" class="selected-info"></div>
-    <div id="selectedVehicleType" class="selected-info"></div>
-    
-    <div id="carInfo" class="car-info"></div>
+  <h1>Car Information Lookup</h1>
+
+  <div>
+    <label for="makeSelect">Select Make:</label>
+    <select id="makeSelect">
+      <!-- Options will be populated dynamically -->
+      <option value="">Select Make</option>
+    </select>
   </div>
+
+  <div>
+    <label for="modelSelect">Select Model:</label>
+    <select id="modelSelect">
+      <!-- Options will be populated dynamically -->
+      <option value="">Select Model</option>
+    </select>
+  </div>
+
+  <div>
+    <label for="yearSelect">Select Year:</label>
+    <select id="yearSelect">
+      <!-- Options will be populated dynamically -->
+    </select>
+  </div>
+
+  <div id="carInfo"></div>
+
+  <button id="getCarInfoBtn">Get Info</button>
 
   <script src="script.js"></script>
 </body>

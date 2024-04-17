@@ -14,4 +14,8 @@ Git
 
 ## Installation process
 You need to fork and clone the repository to your computer using the git clone command on your terminal.
- 
+
+## Car Information 
+
+## Description
+The program is a program designed to allow the user to input the make, model and year of manufacture of a specific vehicle. Once the user selects, the program can be ran to display other detailed information about the car.
